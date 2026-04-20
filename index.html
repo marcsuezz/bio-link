@@ -133,6 +133,23 @@
         }
         /* Dari 30% ke 100% tombol akan diam, memberi jeda sebelum goyang lagi */
       }
+
+      /* --- ANIMASI BACKGROUND UNTUK HP --- */
+      
+      /* Membuat pergerakan lambat yang mulus */
+      @keyframes nafasBackground {
+          0% { transform: scale(1.1) translate(0px, 0px); }
+          50% { transform: scale(1.15) translate(-10px, -15px); }
+          100% { transform: scale(1.1) translate(0px, 0px); }
+      }
+
+      /* Hanya aktifkan animasi ini jika layar seukuran HP (maksimal lebar 768px) */
+      @media (max-width: 768px) {
+          .background {
+              /* Memanggil animasi agar berjalan 15 detik dan berulang terus */
+              animation: nafasBackground 15s infinite ease-in-out;
+          }
+      }
     </style>
   </head>
   <body>
