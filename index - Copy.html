@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Marcsuezz</title>
+    <link
+      rel="icon"
+      type="image/png"
+      href="https://cdn.bio.link/uploads/profile_pictures/2026-04-19/6mnQPsO4DibP9xRCRFENvBto982UQMjy.png"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Inter", sans-serif;
+      }
+
+      body {
+        background-color: #000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        color: white;
+        overflow-x: hidden;
+      }
+
+      .background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url("https://cdn.bio.link/uploads/backgrounds/2026-04-19/mnUdhYbGlICKIjyZOUUwSuGIYNiledf1.jpg");
+        background-size: cover;
+        background-position: center;
+        z-index: -1;
+        transform: scale(1.1);
+        transition: transform 0.1s ease-out;
+      }
+
+      /* === CONTAINER DENGAN TRANSISI LEBAR === */
+      .container {
+        width: 100%;
+        max-width: 400px;
+        padding: 40px 20px;
+        text-align: center;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        margin: 0 auto;
+        transition: max-width 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .container.view-about-active {
+        max-width: 650px;
+      }
+
+      @media (max-width: 768px) {
+        .container.view-about-active {
+          max-width: 100%;
+        }
+      }
+
+      /* === HEADER PROFIL (TEKNIK SEAMLESS TRANSITION) === */
+      .profile-info {
+        position: relative;
+        width: 100%;
+        height: 180px; /* Tinggi default saat vertikal */
+        margin-bottom: 30px;
+        transition: all 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .profile-img {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .profile-name {
+        position: absolute;
+        top: 140px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 1.5rem;
+        font-weight: 600;
+        white-space: nowrap;
+        transition: all 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      /* Perubahan posisi saat About Me Aktif */
+      .view-about-active .profile-info {
+        height: 120px; /* Tinggi mengecil menyesuaikan foto */
+        margin-bottom: 25px;
+      }
+
+      .view-about-active .profile-img {
+        left: 0;
+        transform: translateX(0);
+      }
+
+      .view-about-active .profile-name {
+        top: 50%;
+        left: 140px; /* Lebar foto (120px) + Gap (20px) */
+        transform: translate(0, -50%);
+      }
+
+      /* === ANIMASI KONTEN (FADE & SLIDE) === */
+      .view-content {
+        transition: all 0.4s ease;
+        width: 100%;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transform: translateY(40px);
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .view-content.active {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transform: translateY(0);
+        position: relative;
+        /* Delay 0.4s agar muncul SETELAH konten lama menghilang */
+        transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1) 0.4s;
+      }
+
+      .links-container {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .link-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 16px;
+        border-radius: 50px;
+        text-decoration: none;
+        color: white;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+
+      .link-card:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+      }
+
+      .icon {
+        position: absolute;
+        left: 20px;
+        width: 40px;
+        height: 40px;
+      }
+
+      /* === KOTAK ABOUT ME === */
+      .about-content {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 25px;
+        border-radius: 20px;
+        line-height: 1.6;
+        font-size: 0.95rem;
+        color: #ddd;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        text-align: justify; /* Rata kanan kiri */
+      }
+
+      /* === FOOTER === */
+      .footer {
+        margin-top: 50px;
+        font-size: 0.8rem;
+        opacity: 0.6;
+      }
+
+      #btn-about {
+        cursor: pointer;
+        text-decoration: none;
+        font-weight: 400;
+        transition: all 0.3s;
+      }
+
+      #btn-about:hover {
+        text-decoration: underline;
+      }
+
+      /* Animasi Wobble & Nafas Background */
+      .tombol-gerak {
+        animation: wobble 2.5s infinite ease-in-out;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+      }
+      @keyframes wobble {
+        0%,
+        100% {
+          transform: scale(1) rotate(0deg);
+        }
+        10% {
+          transform: scale(1.03) rotate(-1.5deg);
+        }
+        20% {
+          transform: scale(1.03) rotate(1.5deg);
+        }
+        30% {
+          transform: scale(1) rotate(0deg);
+        }
+      }
+      @keyframes nafasBackground {
+        0% {
+          transform: scale(1.1) translate(0px, 0px);
+        }
+        50% {
+          transform: scale(1.15) translate(-10px, -15px);
+        }
+        100% {
+          transform: scale(1.1) translate(0px, 0px);
+        }
+      }
+      @media (max-width: 768px) {
+        .background {
+          animation: nafasBackground 15s infinite ease-in-out;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="background"></div>
+
+    <div id="app-container" class="container">
+      <div class="profile-info">
+        <img
+          src="https://cdn.bio.link/uploads/profile_pictures/2026-04-19/6mnQPsO4DibP9xRCRFENvBto982UQMjy.png"
+          alt="Profile"
+          class="profile-img"
+        />
+        <h1 class="profile-name">Marcsuezz</h1>
+      </div>
+
+      <div id="content-links" class="view-content active">
+        <div class="links-container">
+          <a
+            href="https://canva.com"
+            target="_blank"
+            class="link-card tombol-gerak"
+            >Canva Pro</a
+          >
+          <a href="https://net22.cc/home" target="_blank" class="link-card">
+            <img
+              src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbzFuajdieWpmMnp0Ymp4MXk3ZDJjdW9rNXQyd2dhamczbmJxbzZ5eiZlcD12MV9zdGlja2Vyc19zZWFyY2gmY3Q9cw/KHVuWBOYyxOApka7XC/giphy.gif"
+              class="icon"
+              alt="Netflix"
+            />
+            Netflix Free
+          </a>
+          <a href="https://s.id/meonspotify" target="_blank" class="link-card">
+            <img
+              src="https://cdn.bio.link/uploads/thumbnails/2026-04-19/T9l3lxap09RaJChBploaded_cYHmRK4z.gif"
+              class="icon"
+              alt="Spotify"
+            />
+            My Spotify
+          </a>
+          <a
+            href="https://s.id/findmeonroblox"
+            target="_blank"
+            class="link-card"
+          >
+            <img
+              src="https://cdn.bio.link/uploads/thumbnails/2026-04-19/0NczwuOv7fSZWMTJploaded_EiqLhNg0.gif"
+              class="icon"
+              style="filter: invert(1)"
+              alt="Roblox"
+            />
+            My Roblox
+          </a>
+        </div>
+      </div>
+
+      <div id="content-about" class="view-content">
+        <div class="about-content">
+          <p>
+            Halo, bolo-bolo! Saya adalah pembelajar seumur hidup yang senang
+            mengeksplorasi banyak hal. Di dunia literasi, saya aktif merangkai
+            kata—mulai dari cuitan ringan di Twitter hingga cerita yang
+            mengeksplorasi dinamika emosi manusia, tentu dengan sentuhan komedi.
+            <br /><br />
+            Di dunia digital, saya gemar mengoprek kode, mencoba sistem operasi,
+            mendalami penggunaan dan pengembangan AI, hingga menyalurkan
+            kreativitas visual lewat fotografi, edit foto, dan sketsa. Saat
+            menjauh dari layar, Anda bisa menemukan saya sedang mengulik musik
+            seperti bermain biola, gitar, keyboard secara otodidak, berenang,
+            atau mendaki gunung untuk mencari ketenangan. Salam kenal yaa!
+          </p>
+        </div>
+      </div>
+
+      <div class="footer">
+        &copy; 2026 Marcsuezz <span id="titik-pemisah">.</span>
+        <span id="btn-about">More About Me</span>
+      </div>
+    </div>
+
+    <script>
+      // Logika Google Sheets & Parallax tetap sama
+      const sheetURL =
+        "https://docs.google.com/spreadsheets/d/e/2PACX-1vTryeaR9gLAo4ZuK5j47MwP7kf4pvceOI-_RFXUZ2uF-d3aIlTPpJy3MbVcYEWLHrMwDVvnJaRJiHAr/pub?gid=0&single=true&output=csv";
+
+      async function updateLinks() {
+        try {
+          const response = await fetch(sheetURL);
+          const data = await response.text();
+          const rows = data.split("\n").slice(1);
+          rows.forEach((row) => {
+            const cleanRow = row.replace(/\r/g, "");
+            const [nama, url] = cleanRow.split(",");
+            if (nama && url) {
+              const allLinks = document.querySelectorAll(".link-card");
+              allLinks.forEach((link) => {
+                if (
+                  link.innerText
+                    .trim()
+                    .toLowerCase()
+                    .includes(nama.trim().toLowerCase())
+                ) {
+                  let urlFinal = url.trim();
+                  if (!urlFinal.startsWith("http"))
+                    urlFinal = "https://" + urlFinal;
+                  link.href = urlFinal;
+                }
+              });
+            }
+          });
+        } catch (e) {}
+      }
+      updateLinks();
+
+      document.addEventListener("mousemove", (e) => {
+        const bg = document.querySelector(".background");
+        const x = (e.clientX - window.innerWidth / 2) / 40;
+        const y = (e.clientY - window.innerHeight / 2) / 40;
+        bg.style.transform = `scale(1.1) translate(${x}px, ${y}px)`;
+      });
+
+      // === LOGIKA TRANSISI FINAL ===
+      const btnAbout = document.getElementById("btn-about");
+      const titikPemisah = document.getElementById("titik-pemisah");
+      const appContainer = document.getElementById("app-container");
+      const contentLinks = document.getElementById("content-links");
+      const contentAbout = document.getElementById("content-about");
+
+      btnAbout.addEventListener("click", (e) => {
+        e.stopPropagation();
+        appContainer.classList.add("view-about-active");
+        contentLinks.classList.remove("active");
+        contentAbout.classList.add("active");
+        btnAbout.style.display = "none";
+        titikPemisah.style.display = "none";
+      });
+
+      document.addEventListener("click", (e) => {
+        if (
+          appContainer.classList.contains("view-about-active") &&
+          !e.target.closest(".about-content")
+        ) {
+          appContainer.classList.remove("view-about-active");
+          contentAbout.classList.remove("active");
+          contentLinks.classList.add("active");
+          btnAbout.style.display = "inline";
+          titikPemisah.style.display = "inline";
+        }
+      });
+    </script>
+  </body>
+</html>
